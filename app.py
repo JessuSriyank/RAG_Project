@@ -13,7 +13,7 @@ from langchain_community.vectorstores import FAISS
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 # Load environment variables
-groq_api_key="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"
+groq_api_key="GROQ_API_KEY"
 
 # Set up Streamlit
 st.title("Simple RAG Application")
