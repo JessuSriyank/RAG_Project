@@ -1,6 +1,7 @@
 import os
 import time
 # from dotenv import load_dotenv
+from pyngrok import ngrok
 import streamlit as st
 
 from langchain_groq import ChatGroq
@@ -14,10 +15,11 @@ from langchain_community.vectorstores import FAISS
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 # Load environment variables
-groq_api_key = "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"
+groq_api_key="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"
 
 # Set up Streamlit
 st.title("Simple RAG Application")
+
 
 def hide_streamlit_style():
     st.markdown(
@@ -30,6 +32,7 @@ def hide_streamlit_style():
         """,
         unsafe_allow_html=True
     )
+
 
 hide_streamlit_style()
 
@@ -78,32 +81,32 @@ if uploaded_file:
         # Set up document chain and retrieval chain
         document_chain = create_stuff_documents_chain(llm, prompt_template)
         retrieval_chain = create_retrieval_chain(retriever, document_chain)
-
-        # Now show the query input field
-        user_query = st.text_input("Enter your question here:")
-
-        if user_query:
-            try:
-                start = time.process_time()
-                response = retrieval_chain.invoke({"input": user_query})
-                end_time = time.process_time() - start
-
-                st.write(f"Response time: {end_time:.2f} seconds")
-                st.subheader("AI Response:")
-                st.write(response.get('answer', "No response generated."))
-
-                # Display retrieved documents with similarity search
-                context_results = response.get("context", [])
-                if context_results:
-                    with st.expander("Document Similarity Search Results"):
-                        for i, doc in enumerate(context_results):
-                            st.write(f"**Result {i + 1}:**")
-                            st.write(doc.page_content)
-                            st.write("--------------------------------")
-            except Exception as e:
-                st.error(f"Error during query processing: {e}")
-
     except Exception as e:
         st.error(f"Error processing PDF: {e}")
+        st.stop()
+
+    # Get user query
+    user_query = st.text_input("Enter your question here:")
+
+    if user_query:
+        try:
+            start = time.process_time()
+            response = retrieval_chain.invoke({"input": user_query})
+            end_time = time.process_time() - start
+
+            st.write(f"Response time: {end_time:.2f} seconds")
+            st.subheader("AI Response:")
+            st.write(response.get('answer', "No response generated."))
+
+            # Display retrieved documents with similarity search
+            context_results = response.get("context", [])
+            if context_results:
+                with st.expander("Document Similarity Search Results"):
+                    for i, doc in enumerate(context_results):
+                        st.write(f"**Result {i + 1}:**")
+                        st.write(doc.page_content)
+                        st.write("--------------------------------")
+        except Exception as e:
+            st.error(f"Error during query processing: {e}")
 else:
     st.warning("Please upload a PDF file to start.")
