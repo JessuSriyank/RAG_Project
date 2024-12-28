@@ -1,7 +1,7 @@
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 # Path to your credentials.json file
-credentials_path = '/home/dtel/Desktop/Grog/client.json'
+credentials_path = '/etc/secrets/credentials.json'
 
 # Path to save the token.json file
 token_path = '/home/dtel/Desktop/Grog/token.json'
