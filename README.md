@@ -1,10 +1,10 @@
 # RAG
 Document Retrieval System
 
-for GCP setup
-Open GCP Console in web
+## for GCP setup
 
-Navigate to IAM & Admin:
+## Navigate to IAM & Admin:
+->Open GCP Console in web
 
 ->In the left-hand menu, go to IAM & Admin > Service Accounts.
 
@@ -29,11 +29,11 @@ Navigate to IAM & Admin:
 ->A JSON file will be downloaded to your computer. This is your service account key. rename it as credentials.json
 
 
-open command prompt and run the command
+## open command prompt and run the command
 
 ->export GOOGLE_APPLICATION_CREDENTIALS="path_to_credentials.json"
 
-to run code follow below command
+## to run code follow below command
 
 1.pip install -r requirements.txt
 
