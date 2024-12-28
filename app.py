@@ -1,7 +1,5 @@
 import os
 import time
-# from dotenv import load_dotenv
-from pyngrok import ngrok
 import streamlit as st
 
 from langchain_groq import ChatGroq
@@ -15,11 +13,10 @@ from langchain_community.vectorstores import FAISS
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 # Load environment variables
-groq_api_key="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"
+groq_api_key = "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"
 
 # Set up Streamlit
 st.title("Simple RAG Application")
-
 
 def hide_streamlit_style():
     st.markdown(
@@ -33,7 +30,6 @@ def hide_streamlit_style():
         unsafe_allow_html=True
     )
 
-
 hide_streamlit_style()
 
 # Initialize the language model
@@ -45,6 +41,10 @@ except Exception as e:
 
 # File upload for PDF
 uploaded_file = st.file_uploader("Upload your PDF file", type="pdf")
+
+# Initialize variables
+retrieval_chain = None
+user_query = None
 
 # Process PDF and create vector store
 if uploaded_file:
@@ -81,11 +81,14 @@ if uploaded_file:
         # Set up document chain and retrieval chain
         document_chain = create_stuff_documents_chain(llm, prompt_template)
         retrieval_chain = create_retrieval_chain(retriever, document_chain)
+
+        st.success("File uploaded and processed successfully!")
+
     except Exception as e:
         st.error(f"Error processing PDF: {e}")
-        st.stop()
 
-    # Get user query
+# Now show the query input field (only after the file upload and processing)
+if retrieval_chain:
     user_query = st.text_input("Enter your question here:")
 
     if user_query:
@@ -108,5 +111,6 @@ if uploaded_file:
                         st.write("--------------------------------")
         except Exception as e:
             st.error(f"Error during query processing: {e}")
+
 else:
     st.warning("Please upload a PDF file to start.")
