@@ -1,6 +1,7 @@
 import os
 import time
 # from dotenv import load_dotenv
+from pyngrok import ngrok
 import streamlit as st
 
 from langchain_groq import ChatGroq
@@ -45,9 +46,6 @@ except Exception as e:
 # File upload for PDF
 uploaded_file = st.file_uploader("Upload your PDF file", type="pdf")
 
-# Initialize some variables
-retrieval_chain = None
-
 # Process PDF and create vector store
 if uploaded_file:
     try:
@@ -83,18 +81,11 @@ if uploaded_file:
         # Set up document chain and retrieval chain
         document_chain = create_stuff_documents_chain(llm, prompt_template)
         retrieval_chain = create_retrieval_chain(retriever, document_chain)
-
-        st.success("File uploaded and processed successfully!")  # Show success message
-
-        # Force page rerun after processing
-        st.experimental_rerun()
-
     except Exception as e:
         st.error(f"Error processing PDF: {e}")
-        st.stop()  # Stop further execution
+        st.stop()
 
-# Show the query input field after file is processed
-if retrieval_chain:
+    # Get user query
     user_query = st.text_input("Enter your question here:")
 
     if user_query:
