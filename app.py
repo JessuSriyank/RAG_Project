@@ -1,7 +1,6 @@
 import os
 import time
 # from dotenv import load_dotenv
-from pyngrok import ngrok
 import streamlit as st
 
 from langchain_groq import ChatGroq
