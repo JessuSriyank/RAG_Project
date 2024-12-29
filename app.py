@@ -18,7 +18,7 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 groq_api_key="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"
 
 # Set up Streamlit
-st.title("Simple RAG Application")
+st.title("RAG Application")
 
 
 def hide_streamlit_style():
